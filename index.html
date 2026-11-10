@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#6366f1">
+<title>Sun’iy intellekt testi</title>
+<style>
+:root{--bg1:#e0e7ff;--bg2:#fce7f3;--card:rgba(255,255,255,.88);--text:#1e1b4b;--muted:#6b7280;--pri:#6366f1;--pri2:#ec4899;--ok:#16a34a;--okbg:#dcfce7;--bad:#dc2626;--badbg:#fee2e2;--line:#e5e7eb;--info:#eef2ff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg1:#14123a;--bg2:#2e0a3a;--card:rgba(31,29,58,.9);--text:#f1f5f9;--muted:#9ca3af;--okbg:#10331c;--badbg:#3d1414;--line:#35335e;--info:#26244b}}
+:root[data-theme="dark"]{color-scheme:dark;--bg1:#14123a;--bg2:#2e0a3a;--card:rgba(31,29,58,.9);--text:#f1f5f9;--muted:#9ca3af;--okbg:#10331c;--badbg:#3d1414;--line:#35335e;--info:#26244b}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%}
+body{min-height:100vh;min-height:100dvh;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--text);background:linear-gradient(135deg,var(--bg1),var(--bg2)) fixed;padding:calc(12px + env(safe-area-inset-top,0px)) calc(12px + env(safe-area-inset-right,0px)) calc(20px + env(safe-area-inset-bottom,0px)) calc(12px + env(safe-area-inset-left,0px));overflow-x:hidden}
+body::before,body::after{content:"";position:fixed;z-index:-1;width:50vmax;height:50vmax;border-radius:50%;filter:blur(70px);opacity:.35;animation:fl 14s infinite alternate ease-in-out}
+body::before{background:var(--pri);top:-20vmax;left:-15vmax}body::after{background:var(--pri2);bottom:-22vmax;right:-15vmax;animation-delay:-6s}
+@keyframes fl{to{transform:translate(8vmax,6vmax) scale(1.15)}}
+.wrap{width:100%;max-width:620px;margin:0 auto}
+.nav{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-weight:800}
+.nav button{border:0;background:var(--card);color:var(--text);width:42px;height:42px;border-radius:50%;font-size:1.1rem;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.15)}
+.card{background:var(--card);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:26px;padding:clamp(16px,5vw,28px);box-shadow:0 12px 40px rgba(99,102,241,.22);animation:pop .4s ease}
+@keyframes pop{from{opacity:0;transform:translateY(16px) scale(.98)}to{opacity:1;transform:none}}
+h1{margin:0 0 6px;font-size:clamp(1.4rem,6vw,1.9rem);line-height:1.2}
+h2{margin:0 0 16px;font-size:clamp(1.1rem,4.6vw,1.35rem);line-height:1.4}
+h3{margin:14px 0 8px;font-size:1rem}
+.c{text-align:center}
+.hero{font-size:clamp(3.2rem,16vw,4.5rem);text-align:center;animation:bob 2.6s infinite ease-in-out}
+@keyframes bob{50%{transform:translateY(-8px) rotate(5deg)}}
+.sub{color:var(--muted);margin:0 0 18px;line-height:1.5;font-size:.95rem}
+input{width:100%;padding:15px 16px;margin-bottom:12px;border:2px solid var(--line);border-radius:16px;font-size:16px;background:transparent;color:var(--text)}
+input:focus{outline:none;border-color:var(--pri);box-shadow:0 0 0 4px rgba(99,102,241,.18)}
+.btn{display:block;width:100%;min-height:52px;padding:14px;border:0;border-radius:16px;font-size:1.05rem;font-weight:700;color:#fff;cursor:pointer;background:linear-gradient(90deg,var(--pri),var(--pri2));box-shadow:0 6px 18px rgba(236,72,153,.3);transition:transform .15s}
+.btn:active{transform:scale(.97)}
+.btn.ghost{background:transparent;color:var(--pri);border:2px solid var(--pri);margin-top:10px;box-shadow:none}
+.btn.sm{min-height:44px;font-size:.9rem}
+.err{color:var(--bad);min-height:20px;font-size:.9rem;margin:0 0 8px}
+.top{display:flex;justify-content:space-between;align-items:center;font-size:.9rem;color:var(--muted);margin-bottom:10px;font-weight:600}
+.chip{background:var(--info);padding:4px 10px;border-radius:99px;color:var(--text)}
+.bar{height:10px;background:var(--line);border-radius:99px;overflow:hidden;margin-bottom:18px}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--pri),var(--pri2));transition:width .5s;border-radius:99px}
+.opt{display:flex;gap:12px;align-items:center;width:100%;min-height:56px;text-align:left;padding:12px 14px;margin-bottom:10px;border:2px solid var(--line);border-radius:16px;background:transparent;color:var(--text);font-size:clamp(.95rem,4vw,1.05rem);line-height:1.35;cursor:pointer;transition:.15s;font-family:inherit}
+.opt:active:not(:disabled){transform:scale(.98)}
+@media (hover:hover){.opt:hover:not(:disabled){border-color:var(--pri);transform:translateX(4px)}}
+.opt b{flex:none;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:var(--line);font-size:.85rem}
+.opt:disabled{cursor:default;opacity:.75}
+.opt.ok{opacity:1;border-color:var(--ok);background:var(--okbg)}.opt.ok b{background:var(--ok);color:#fff}
+.opt.bad{opacity:1;border-color:var(--bad);background:var(--badbg);animation:sh .35s}.opt.bad b{background:var(--bad);color:#fff}
+@keyframes sh{25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+.fb{border-radius:16px;padding:14px;margin:4px 0 12px;font-size:.95rem;line-height:1.5;animation:pop .35s ease}
+.fb.ok{background:var(--okbg);border-left:5px solid var(--ok)}.fb.bad{background:var(--badbg);border-left:5px solid var(--bad)}
+.fb b{display:block;margin-bottom:4px}
+.score{text-align:center;font-size:clamp(2.6rem,13vw,3.6rem);font-weight:800;background:linear-gradient(90deg,var(--pri),var(--pri2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+.stats div{background:var(--info);border-radius:14px;padding:10px 4px;text-align:center;font-size:.8rem;color:var(--muted)}.stats b{display:block;font-size:1.15rem;color:var(--text)}
+.tabs{display:flex;gap:8px;margin:14px 0 12px}
+.tabs button{flex:1;min-height:44px;border-radius:14px;border:2px solid var(--line);background:transparent;color:var(--text);font-weight:700;cursor:pointer;font-family:inherit}
+.tabs button.on{background:var(--pri);color:#fff;border-color:var(--pri)}
+.rev{border-left:5px solid var(--bad);padding:12px;margin-bottom:10px;background:var(--badbg);border-radius:12px;font-size:.92rem;line-height:1.5;text-align:left}
+.rev .e{margin-top:6px;padding-top:6px;border-top:1px dashed var(--line);color:var(--muted)}
+.pod{display:flex;align-items:flex-end;justify-content:center;gap:8px;margin:8px 0 16px;text-align:center}
+.pod div{flex:1;max-width:130px}
+.pod .nm{font-size:.8rem;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pod .st{border-radius:14px 14px 0 0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:8px;color:#fff;font-weight:800;margin-top:4px}
+.pod .st small{font-weight:600;opacity:.9}
+.p1 .st{height:120px;background:linear-gradient(#fbbf24,#f59e0b)}.p2 .st{height:90px;background:linear-gradient(#cbd5e1,#94a3b8)}.p3 .st{height:70px;background:linear-gradient(#fdba74,#c2410c)}
+.row{display:flex;gap:10px;align-items:center;padding:11px 12px;border-radius:14px;margin-bottom:6px;background:var(--info);font-size:.93rem}
+.row.me{outline:2px solid var(--pri);background:var(--okbg)}
+.row .n{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.row .k{width:28px;text-align:center;font-weight:800}.row small{color:var(--muted)}
+.cf{position:fixed;top:-30px;z-index:9;font-size:1.5rem;pointer-events:none;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(540deg)}}
+.hide{display:none}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="nav"><span>🤖 AI Test</span><button id="tg" aria-label="Mavzu">🌓</button></div>
+<div id="app"></div>
+</div>
+<script>
+var Q=[
+["Sun’iy intellekt nima?",["Kompyuter o‘yini","Inson aqliga taqlid qiluvchi texnologiya","Internet tarmog‘i","Oddiy kalkulyator"],1,"Sun’iy intellekt — mashinalarning inson kabi o‘rganish, fikrlash va qaror qabul qilish qobiliyatiga taqlid qiluvchi texnologiya."],
+["AI qisqartmasi nimani anglatadi?",["Artificial Intelligence","Automatic Internet","Advanced Information","Artificial Internet"],0,"AI — Artificial Intelligence, ya’ni o‘zbekchada «sun’iy intellekt»."],
+["ChatGPT qaysi kompaniya tomonidan yaratilgan?",["Google","Microsoft","OpenAI","Apple"],2,"ChatGPT’ni 2022-yilda OpenAI kompaniyasi ommaga taqdim etgan."],
+["Sun’iy intellektning asosiy vazifalaridan biri qaysi?",["Faqat o‘yin o‘ynash","Faqat musiqa tinglash","Internetni o‘chirish","Ma’lumotlarni tahlil qilish va vazifalarni bajarish"],3,"SI katta hajmdagi ma’lumotlarni tahlil qiladi va turli vazifalarni tez bajaradi. Boshqa variantlar uning asosiy vazifasi emas."],
+["Machine Learning nima?",["Mashinaning ma’lumotlar asosida o‘rganishi","Kompyuterni ta’mirlash","Video montaj qilish","Internet tezligini oshirish"],0,"Machine Learning (mashinali o‘rganish) — dastur aniq ko‘rsatmasiz, ma’lumotlardagi qonuniyatlarni o‘zi o‘rganadi."],
+["Qaysi biri sun’iy intellekt yordamida rasm yaratadi?",["Excel","Calculator","DALL·E","Notepad"],2,"DALL·E — matndagi tavsifdan rasm yaratadigan AI model. Excel, Calculator va Notepad bunday qila olmaydi."],
+["Sun’iy intellekt ta’limda qanday yordam beradi?",["Darslarni bekor qiladi","Mavzularni tushuntiradi va o‘rganishga yordam beradi","Faqat o‘yin yaratadi","Internetni tezlashtiradi"],1,"SI mavzuni sodda tilda tushuntiradi, misollar keltiradi va o‘rganishni shaxsiylashtirishga yordam beradi."],
+["AI ning salbiy tomonlaridan biri qaysi?",["Vaqtni tejash","Bilim olish","Ish unumdorligini oshirish","Noto‘g‘ri ma’lumot berishi"],3,"Boshqa variantlar foydali tomonlar. SI esa ba’zan ishonchli ko‘rinadigan, lekin noto‘g‘ri ma’lumot berishi mumkin."],
+["Python qanday dasturlash tili?",["Dasturlash tili","Operatsion tizim","Antivirus","Brauzer"],0,"Python — oddiy sintaksisli dasturlash tili va sun’iy intellekt sohasida eng ko‘p ishlatiladi."],
+["Sun’iy intellekt har doim to‘g‘ri javob beradimi?",["Ha, doimo","Faqat kechasi","Yo‘q, ba’zida xato qiladi","Faqat internet bo‘lsa"],2,"SI ham xato qilishi mumkin, shuning uchun muhim javoblarni albatta tekshirib ko‘rish kerak."],
+["Mashhur AI chatbot qaysi?",["Paint","ChatGPT","WordPad","Windows Explorer"],1,"ChatGPT — eng mashhur AI chatbotlardan biri. Qolganlari oddiy kompyuter dasturlari."],
+["Sun’iy intellekt yordamida nimalar yaratish mumkin?",["Faqat matn","Faqat rasmlar","Faqat musiqa","Matn, rasm, audio va video"],3,"Zamonaviy SI faqat bittasi bilan cheklanmaydi: matn, rasm, ovoz va video yarata oladi."],
+["Deep Learning nima?",["Chuqur o‘rganishga asoslangan AI usuli","Oddiy hisoblash","Internet brauzeri","Matn muharriri"],0,"Deep Learning — ko‘p qatlamli neyron tarmoqlar yordamida murakkab qonuniyatlarni o‘rganadigan AI usuli."],
+["AI tibbiyotda qanday qo‘llaniladi?",["Faqat musiqa yaratishda","Faqat o‘yinlarda","Kasalliklarni aniqlashga yordam berishda","Faqat reklama tayyorlashda"],2,"SI rentgen va MRT tasvirlarini tahlil qilib, shifokorga kasallikni erta aniqlashda yordam beradi."],
+["Sun’iy intellektdan foydalanishda nimaga e’tibor berish kerak?",["Faqat tezlikka","Ma’lumotlarning ishonchliligi va xavfsizligiga","Faqat dizaynga","Faqat ranglarga"],1,"Eng muhimi — ma’lumot ishonchli bo‘lishi va xavfsizlik: manbani tekshiring, shaxsiy ma’lumotni ulashmang."],
+["Neyron tarmoq nima?",["Internet kabeli","Kompyuter ekrani","Elektr stansiyasi","Inson miyasi faoliyatidan ilhomlangan hisoblash modeli"],3,"Neyron tarmoq — miyadagi neyronlarning ishlashidan ilhomlangan matematik model."],
+["AI avtomatlashtirishda qanday yordam beradi?",["Takroriy vazifalarni avtomatik bajaradi","Kompyuterni o‘chiradi","Internetni bloklaydi","Ma’lumotlarni yo‘q qiladi"],0,"SI hisobot tayyorlash, saralash kabi takroriy ishlarni avtomatik bajarib, vaqtni tejaydi."],
+["Sun’iy intellektning maxfiylik bilan bog‘liq xavfi nima?",["Kompyuter rangining o‘zgarishi","Ekran yorqinligi","Shaxsiy ma’lumotlarning oshkor bo‘lishi","Klaviatura ishlamasligi"],2,"SI’ga kiritilgan shaxsiy ma’lumotlar oshkor bo‘lishi mumkin. Parol va shaxsiy ma’lumotlarni yubormang."],
+["Prompt nima?",["Kompyuter qurilmasi","AI ga beriladigan ko‘rsatma yoki topshiriq","Internet sayti","Dasturiy virus"],1,"Prompt — AI’ga yozadigan savol yoki topshiriq. Aniq prompt yaxshiroq natija beradi."],
+["Sun’iy intellektdan foydalanishning eng to‘g‘ri usuli qaysi?",["Barcha javoblariga ko‘r-ko‘rona ishonish","Mustaqil fikrlashni to‘xtatish","Shaxsiy ma’lumotlarni yuborish","Tekshirish, fikrlash va mas’uliyat bilan foydalanish"],3,"SI — yordamchi vosita. Natijani tekshirish, o‘zingiz fikrlash va mas’uliyat bilan foydalanish kerak."]
+];
+var L="ABCD",app=document.getElementById("app"),user="",order=[],i=0,score=0,streak=0,best=0,wrong=[],t0=0,lock=false;
+var tmr;function $(h){clearInterval(tmr);app.innerHTML=h;window.scrollTo({top:0})}
+function api(u,m,d){return fetch(u,{method:m||"GET",headers:{"Content-Type":"application/json"},body:d?JSON.stringify(d):undefined}).then(function(r){if(!r.ok)throw 0;return r.json()})}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function shuffle(a){a=a.slice();for(var k=a.length-1;k>0;k--){var j=Math.floor(Math.random()*(k+1)),t=a[k];a[k]=a[j];a[j]=t}return a}
+function load(){try{return JSON.parse(localStorage.getItem("aiq_board")||"[]")}catch(e){return[]}}
+function save(b){try{localStorage.setItem("aiq_board",JSON.stringify(b))}catch(e){}}
+function fmt(s){return Math.floor(s/60)+":"+("0"+s%60).slice(-2)}
+document.getElementById("tg").onclick=function(){var r=document.documentElement;r.dataset.theme=(r.dataset.theme==="dark"||(!r.dataset.theme&&matchMedia("(prefers-color-scheme:dark)").matches))?"light":"dark"};
+function confetti(){var e=["🎉","✨","🎊","⭐","💜"];for(var k=0;k<28;k++){var d=document.createElement("span");d.className="cf";d.textContent=e[k%5];d.style.left=Math.random()*100+"vw";d.style.animationDuration=(2+Math.random()*2.5)+"s";d.style.animationDelay=Math.random()*.8+"s";document.body.appendChild(d);setTimeout(function(x){x.remove()},5500,d)}}
+
+function login(){
+$('<div class="card"><div class="hero">🤖</div><h1 class="c">Sun’iy intellekt testi</h1><p class="sub c">20 ta savol • har xatoga tushuntirish • reyting 🏆</p><input id="fn" placeholder="Ismingiz" maxlength="30" autocomplete="given-name"><input id="ln" placeholder="Familiyangiz" maxlength="30" autocomplete="family-name"><p class="err" id="er"></p><button class="btn" id="go">Kirish 🚀</button><button class="btn ghost" id="bd">🏆 Reytingni ko‘rish</button></div>');
+var f=document.getElementById("fn"),l=document.getElementById("ln");
+function go(){var a=f.value.trim(),b=l.value.trim();if(a.length<2||b.length<2){document.getElementById("er").textContent="Iltimos, ism va familiyani to‘liq kiriting.";return}user=a+" "+b;welcome()}
+document.getElementById("go").onclick=go;l.onkeydown=function(e){if(e.key==="Enter")go()};
+document.getElementById("bd").onclick=function(){board()};
+}
+function welcome(){
+$('<div class="card c"><div class="hero">👋</div><h1>Salom, '+esc(user)+'!</h1><p class="sub">Har bir savolda 4 ta variant bor. Javobdan so‘ng to‘g‘ri yechim ko‘rsatiladi, xato qilsangiz — qisqa tushuntirish ham chiqadi. Omad! 🍀</p><button class="btn" id="st">Testni boshlash ▶</button><button class="btn ghost" id="bd">🏆 Reyting</button><button class="btn ghost" id="bk">← Orqaga</button></div>');
+document.getElementById("st").onclick=start;document.getElementById("bk").onclick=login;document.getElementById("bd").onclick=function(){board()};
+}
+function start(){order=shuffle(Q.map(function(_,k){return k}));i=0;score=0;streak=0;best=0;wrong=[];t0=Date.now();show()}
+function show(){
+lock=false;var q=Q[order[i]],opts=shuffle(q[1].map(function(t,k){return{t:t,c:k===q[2]}}));
+$('<div class="card"><div class="top"><span class="chip">Savol '+(i+1)+'/'+Q.length+'</span><span class="chip">🔥 '+streak+'</span><span class="chip">⭐ '+score+'</span></div><div class="bar"><i style="width:'+(i/Q.length*100)+'%"></i></div><h2>'+esc(q[0])+'</h2><div id="ops"></div><div id="fb"></div><button class="btn hide" id="nx"></button></div>');
+var box=document.getElementById("ops"),nx=document.getElementById("nx"),fb=document.getElementById("fb");
+requestAnimationFrame(function(){var b=document.querySelector(".bar i");if(b)b.style.width=((i+1)/Q.length*100)+"%"});
+opts.forEach(function(o,k){var b=document.createElement("button");b.className="opt";b.innerHTML="<b>"+L[k]+"</b><span></span>";b.lastChild.textContent=o.t;
+b.onclick=function(){if(lock)return;lock=true;var all=box.children;
+for(var m=0;m<all.length;m++){all[m].disabled=true;if(opts[m].c)all[m].classList.add("ok")}
+if(o.c){score++;streak++;if(streak>best)best=streak;fb.innerHTML='<div class="fb ok"><b>✅ To‘g‘ri!</b>Barakalla'+(streak>=3?', '+streak+' ta ketma-ket! 🔥':'!')+'</div>'}
+else{streak=0;b.classList.add("bad");wrong.push({q:q[0],y:o.t,a:q[1][q[2]],e:q[3]});fb.innerHTML='<div class="fb bad"><b>❌ Xato</b>To‘g‘ri javob: <u></u><br><br>💡 <span></span></div>';fb.querySelector("u").textContent=q[1][q[2]];fb.querySelector("span").textContent=q[3]}
+nx.textContent=i===Q.length-1?"Natijani ko‘rish 🏁":"Keyingi savol →";nx.classList.remove("hide");
+setTimeout(function(){nx.scrollIntoView({behavior:"smooth",block:"end"})},120)};
+box.appendChild(b)});
+nx.onclick=function(){i++;i<Q.length?show():finish()};
+}
+function finish(){
+var sec=Math.round((Date.now()-t0)/1000);
+$('<div class="card c"><div class="hero">⏳</div><h1>Natija saqlanmoqda...</h1></div>');
+api("/api/result","POST",{n:user,s:score,t:sec}).then(function(r){done(r.board,r.rank,sec,false,r.mine)}).catch(function(){
+var b=load(),rec={n:user,s:score,t:sec,d:Date.now()};b.push(rec);b.sort(function(x,y){return y.s-x.s||x.t-y.t});b=b.slice(0,50);save(b);done(b,b.indexOf(rec),sec,true)})}
+function done(b,rank,sec,off,mine){
+var pct=Math.round(score/Q.length*100);
+if(mine&&rank>=b.length)b=b.concat([mine]);
+var lv=pct>=90?["🏆","Daho! Siz AI bo‘yicha mutaxassissiz!"]:pct>=70?["🎉","Ajoyib natija!"]:pct>=50?["👍","Yomon emas, yana mashq qiling!"]:["📚","Ko‘proq o‘rganib, qayta urinib ko‘ring!"];
+if(pct>=70)confetti();
+function wr(){return wrong.length?wrong.map(function(x){return '<div class="rev"><b>'+esc(x.q)+'</b><br>❌ '+esc(x.y)+'<br>✅ '+esc(x.a)+'<div class="e">💡 '+esc(x.e)+'</div></div>'}).join(""):'<p class="sub c">Hammasi to‘g‘ri! 🌟</p>'}
+$('<div class="card c"><div class="hero">'+lv[0]+'</div><div class="score">'+score+' / '+Q.length+'</div><p class="sub">'+esc(user)+'<br>'+lv[1]+(off?'<br>⚠️ Internet yo‘q — natija faqat shu qurilmada saqlandi':'')+'</p><div class="stats"><div><b>'+pct+'%</b>natija</div><div><b>'+fmt(sec)+'</b>vaqt</div><div><b>#'+(rank+1)+'</b>o‘rningiz</div></div><div class="tabs"><button id="t1" class="on">Xatolar</button><button id="t2">Reyting</button></div><div id="pn" style="text-align:left"></div><button class="btn" id="rs" style="margin-top:14px">🔄 Qayta topshirish</button><button class="btn ghost" id="lo">Chiqish</button></div>');
+var pn=document.getElementById("pn"),t1=document.getElementById("t1"),t2=document.getElementById("t2");
+function a(){t1.className="on";t2.className="";pn.innerHTML="<h3>Xato javoblar ("+wrong.length+")</h3>"+wr()}
+a();t1.onclick=a;
+t2.onclick=function(){t2.className="on";t1.className="";pn.innerHTML=lb(b,Math.min(rank,b.length-1),rank)};
+document.getElementById("rs").onclick=start;document.getElementById("lo").onclick=function(){user="";login()};
+}
+function lb(b,me,rk){
+if(!b.length)return '<p class="sub c">Hozircha natijalar yo‘q. Birinchi bo‘ling! 🚀</p>';
+var p="";if(b.length>=3){var o=[1,0,2],cl=["p2","p1","p3"],md=["🥈","🥇","🥉"];
+p='<div class="pod">'+o.map(function(k,j){var x=b[k];return '<div class="'+cl[j]+'"><div class="nm">'+esc(x.n)+'</div><div class="st"><span style="font-size:1.4rem">'+md[j]+'</span>'+x.s+'/20<small>'+fmt(x.t)+'</small></div></div>'}).join("")+'</div>'}
+var s=p?3:0;
+return p+b.slice(s,10).map(function(x,k){k+=s;return '<div class="row'+(k===me?" me":"")+'"><span class="k">'+(k+1)+'</span><span class="n">'+esc(x.n)+'</span><b>'+x.s+'/20</b><small>'+fmt(x.t)+'</small></div>'}).join("")+(me>=10&&b[me]?'<div class="row me"><span class="k">'+((rk!=null?rk:me)+1)+'</span><span class="n">'+esc(b[me].n)+'</span><b>'+b[me].s+'/20</b><small>'+fmt(b[me].t)+'</small></div>':'')}
+function board(){
+$('<div class="card"><h1>🏆 Reyting</h1><p class="sub" id="tot">Yuklanmoqda...</p><div id="bl"></div><button class="btn ghost" id="bk">← Orqaga</button></div>');
+document.getElementById("bk").onclick=function(){user?welcome():login()};
+function r(){var l=document.getElementById("bl");if(!l)return;var t=document.getElementById("tot");
+api("/api/board").then(function(d){var k=-1;d.board.forEach(function(x,j){if(user&&x.n.toLowerCase()===user.toLowerCase())k=j});t.textContent="Ishtirokchilar: "+d.total+" • har 10 soniyada yangilanadi";l.innerHTML=lb(d.board,k)}).catch(function(){t.textContent="⚠️ Serverga ulanib bo‘lmadi";l.innerHTML=lb(load(),-1)})}
+r();tmr=setInterval(r,10000)}
+login();
+</script>
+</body>
+</html>
