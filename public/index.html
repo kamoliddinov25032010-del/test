@@ -100,11 +100,14 @@ var Q=[
 ["Prompt nima?",["Kompyuter qurilmasi","AI ga beriladigan ko‘rsatma yoki topshiriq","Internet sayti","Dasturiy virus"],1,"Prompt — AI’ga yozadigan savol yoki topshiriq. Aniq prompt yaxshiroq natija beradi."],
 ["Sun’iy intellektdan foydalanishning eng to‘g‘ri usuli qaysi?",["Barcha javoblariga ko‘r-ko‘rona ishonish","Mustaqil fikrlashni to‘xtatish","Shaxsiy ma’lumotlarni yuborish","Tekshirish, fikrlash va mas’uliyat bilan foydalanish"],3,"SI — yordamchi vosita. Natijani tekshirish, o‘zingiz fikrlash va mas’uliyat bilan foydalanish kerak."]
 ];
-var L="ABCD",app=document.getElementById("app"),user="",order=[],i=0,score=0,streak=0,best=0,wrong=[],t0=0,lock=false;
+var N=20,L="ABCD",app=document.getElementById("app"),user="",order=[],i=0,score=0,streak=0,best=0,wrong=[],t0=0,lock=false;
 var tmr;function $(h){clearInterval(tmr);app.innerHTML=h;window.scrollTo({top:0})}
 function api(u,m,d){return fetch(u,{method:m||"GET",headers:{"Content-Type":"application/json"},body:d?JSON.stringify(d):undefined}).then(function(r){if(!r.ok)throw 0;return r.json()})}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
-function shuffle(a){a=a.slice();for(var k=a.length-1;k>0;k--){var j=Math.floor(Math.random()*(k+1)),t=a[k];a[k]=a[j];a[j]=t}return a}
+function rnd(n){try{var a=new Uint32Array(1);crypto.getRandomValues(a);return a[0]%n}catch(e){return Math.floor(Math.random()*n)}}
+function shuffle(a){a=a.slice();for(var k=a.length-1;k>0;k--){var j=rnd(k+1),t=a[k];a[k]=a[j];a[j]=t}return a}
+var lastPos=-1;
+function mix(a){var r,t=0,p;do{r=shuffle(a);p=r.findIndex(function(o){return o.c});t++}while(t<10&&p===lastPos);lastPos=p;return r}
 function load(){try{return JSON.parse(localStorage.getItem("aiq_board")||"[]")}catch(e){return[]}}
 function save(b){try{localStorage.setItem("aiq_board",JSON.stringify(b))}catch(e){}}
 function fmt(s){return Math.floor(s/60)+":"+("0"+s%60).slice(-2)}
@@ -112,7 +115,7 @@ document.getElementById("tg").onclick=function(){var r=document.documentElement;
 function confetti(){var e=["🎉","✨","🎊","⭐","💜"];for(var k=0;k<28;k++){var d=document.createElement("span");d.className="cf";d.textContent=e[k%5];d.style.left=Math.random()*100+"vw";d.style.animationDuration=(2+Math.random()*2.5)+"s";d.style.animationDelay=Math.random()*.8+"s";document.body.appendChild(d);setTimeout(function(x){x.remove()},5500,d)}}
 
 function login(){
-$('<div class="card"><div class="hero">🤖</div><h1 class="c">Sun’iy intellekt testi</h1><p class="sub c">20 ta savol • har xatoga tushuntirish • reyting 🏆</p><input id="fn" placeholder="Ismingiz" maxlength="30" autocomplete="given-name"><input id="ln" placeholder="Familiyangiz" maxlength="30" autocomplete="family-name"><p class="err" id="er"></p><button class="btn" id="go">Kirish 🚀</button><button class="btn ghost" id="bd">🏆 Reytingni ko‘rish</button></div>');
+$('<div class="card"><div class="hero">🤖</div><h1 class="c">Sun’iy intellekt testi</h1><p class="sub c">Variantlar har safar aralashadi • reyting 🏆</p><input id="fn" placeholder="Ismingiz" maxlength="30" autocomplete="given-name"><input id="ln" placeholder="Familiyangiz" maxlength="30" autocomplete="family-name"><p class="err" id="er"></p><button class="btn" id="go">Kirish 🚀</button><button class="btn ghost" id="bd">🏆 Reytingni ko‘rish</button></div>');
 var f=document.getElementById("fn"),l=document.getElementById("ln");
 function go(){var a=f.value.trim(),b=l.value.trim();if(a.length<2||b.length<2){document.getElementById("er").textContent="Iltimos, ism va familiyani to‘liq kiriting.";return}user=a+" "+b;welcome()}
 document.getElementById("go").onclick=go;l.onkeydown=function(e){if(e.key==="Enter")go()};
@@ -122,21 +125,21 @@ function welcome(){
 $('<div class="card c"><div class="hero">👋</div><h1>Salom, '+esc(user)+'!</h1><p class="sub">Har bir savolda 4 ta variant bor. Javobdan so‘ng to‘g‘ri yechim ko‘rsatiladi, xato qilsangiz — qisqa tushuntirish ham chiqadi. Omad! 🍀</p><button class="btn" id="st">Testni boshlash ▶</button><button class="btn ghost" id="bd">🏆 Reyting</button><button class="btn ghost" id="bk">← Orqaga</button></div>');
 document.getElementById("st").onclick=start;document.getElementById("bk").onclick=login;document.getElementById("bd").onclick=function(){board()};
 }
-function start(){order=shuffle(Q.map(function(_,k){return k}));i=0;score=0;streak=0;best=0;wrong=[];t0=Date.now();show()}
+function start(){order=Q.map(function(_,k){return k});order=shuffle(order);lastPos=-1;i=0;score=0;streak=0;best=0;wrong=[];t0=Date.now();show()}
 function show(){
-lock=false;var q=Q[order[i]],opts=shuffle(q[1].map(function(t,k){return{t:t,c:k===q[2]}}));
-$('<div class="card"><div class="top"><span class="chip">Savol '+(i+1)+'/'+Q.length+'</span><span class="chip">🔥 '+streak+'</span><span class="chip">⭐ '+score+'</span></div><div class="bar"><i style="width:'+(i/Q.length*100)+'%"></i></div><h2>'+esc(q[0])+'</h2><div id="ops"></div><div id="fb"></div><button class="btn hide" id="nx"></button></div>');
+lock=false;var q=Q[order[i]],opts=mix(q[1].map(function(t,k){return{t:t,c:k===q[2]}}));
+$('<div class="card"><div class="top"><span class="chip">Savol '+(i+1)+'/'+N+'</span><span class="chip">🔥 '+streak+'</span><span class="chip">⭐ '+score+'</span></div><div class="bar"><i style="width:'+(i/N*100)+'%"></i></div><h2>'+esc(q[0])+'</h2><div id="ops"></div><div id="fb"></div><button class="btn hide" id="nx"></button></div>');
 var box=document.getElementById("ops"),nx=document.getElementById("nx"),fb=document.getElementById("fb");
-requestAnimationFrame(function(){var b=document.querySelector(".bar i");if(b)b.style.width=((i+1)/Q.length*100)+"%"});
+requestAnimationFrame(function(){var b=document.querySelector(".bar i");if(b)b.style.width=((i+1)/N*100)+"%"});
 opts.forEach(function(o,k){var b=document.createElement("button");b.className="opt";b.innerHTML="<b>"+L[k]+"</b><span></span>";b.lastChild.textContent=o.t;
 b.onclick=function(){if(lock)return;lock=true;var all=box.children;
 for(var m=0;m<all.length;m++){all[m].disabled=true;if(opts[m].c)all[m].classList.add("ok")}
 if(o.c){score++;streak++;if(streak>best)best=streak;fb.innerHTML='<div class="fb ok"><b>✅ To‘g‘ri!</b>Barakalla'+(streak>=3?', '+streak+' ta ketma-ket! 🔥':'!')+'</div>'}
 else{streak=0;b.classList.add("bad");wrong.push({q:q[0],y:o.t,a:q[1][q[2]],e:q[3]});fb.innerHTML='<div class="fb bad"><b>❌ Xato</b>To‘g‘ri javob: <u></u><br><br>💡 <span></span></div>';fb.querySelector("u").textContent=q[1][q[2]];fb.querySelector("span").textContent=q[3]}
-nx.textContent=i===Q.length-1?"Natijani ko‘rish 🏁":"Keyingi savol →";nx.classList.remove("hide");
+nx.textContent=i===N-1?"Natijani ko‘rish 🏁":"Keyingi savol →";nx.classList.remove("hide");
 setTimeout(function(){nx.scrollIntoView({behavior:"smooth",block:"end"})},120)};
 box.appendChild(b)});
-nx.onclick=function(){i++;i<Q.length?show():finish()};
+nx.onclick=function(){i++;i<N?show():finish()};
 }
 function finish(){
 var sec=Math.round((Date.now()-t0)/1000);
@@ -144,12 +147,12 @@ $('<div class="card c"><div class="hero">⏳</div><h1>Natija saqlanmoqda...</h1>
 api("/api/result","POST",{n:user,s:score,t:sec}).then(function(r){done(r.board,r.rank,sec,false,r.mine)}).catch(function(){
 var b=load(),rec={n:user,s:score,t:sec,d:Date.now()};b.push(rec);b.sort(function(x,y){return y.s-x.s||x.t-y.t});b=b.slice(0,50);save(b);done(b,b.indexOf(rec),sec,true)})}
 function done(b,rank,sec,off,mine){
-var pct=Math.round(score/Q.length*100);
+var pct=Math.round(score/N*100);
 if(mine&&rank>=b.length)b=b.concat([mine]);
 var lv=pct>=90?["🏆","Daho! Siz AI bo‘yicha mutaxassissiz!"]:pct>=70?["🎉","Ajoyib natija!"]:pct>=50?["👍","Yomon emas, yana mashq qiling!"]:["📚","Ko‘proq o‘rganib, qayta urinib ko‘ring!"];
 if(pct>=70)confetti();
 function wr(){return wrong.length?wrong.map(function(x){return '<div class="rev"><b>'+esc(x.q)+'</b><br>❌ '+esc(x.y)+'<br>✅ '+esc(x.a)+'<div class="e">💡 '+esc(x.e)+'</div></div>'}).join(""):'<p class="sub c">Hammasi to‘g‘ri! 🌟</p>'}
-$('<div class="card c"><div class="hero">'+lv[0]+'</div><div class="score">'+score+' / '+Q.length+'</div><p class="sub">'+esc(user)+'<br>'+lv[1]+(off?'<br>⚠️ Internet yo‘q — natija faqat shu qurilmada saqlandi':'')+'</p><div class="stats"><div><b>'+pct+'%</b>natija</div><div><b>'+fmt(sec)+'</b>vaqt</div><div><b>#'+(rank+1)+'</b>o‘rningiz</div></div><div class="tabs"><button id="t1" class="on">Xatolar</button><button id="t2">Reyting</button></div><div id="pn" style="text-align:left"></div><button class="btn" id="rs" style="margin-top:14px">🔄 Qayta topshirish</button><button class="btn ghost" id="lo">Chiqish</button></div>');
+$('<div class="card c"><div class="hero">'+lv[0]+'</div><div class="score">'+score+' / '+N+'</div><p class="sub">'+esc(user)+'<br>'+lv[1]+(off?'<br>⚠️ Internet yo‘q — natija faqat shu qurilmada saqlandi':'')+'</p><div class="stats"><div><b>'+pct+'%</b>natija</div><div><b>'+fmt(sec)+'</b>vaqt</div><div><b>#'+(rank+1)+'</b>o‘rningiz</div></div><div class="tabs"><button id="t1" class="on">Xatolar</button><button id="t2">Reyting</button></div><div id="pn" style="text-align:left"></div><button class="btn" id="rs" style="margin-top:14px">🔄 Qayta topshirish</button><button class="btn ghost" id="lo">Chiqish</button></div>');
 var pn=document.getElementById("pn"),t1=document.getElementById("t1"),t2=document.getElementById("t2");
 function a(){t1.className="on";t2.className="";pn.innerHTML="<h3>Xato javoblar ("+wrong.length+")</h3>"+wr()}
 a();t1.onclick=a;
